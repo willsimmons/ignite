@@ -1,15 +1,18 @@
 import React from 'react'
 import { View, Text, Navigator, StatusBar } from 'react-native'
-import {Router, Routes, NavigationBar} from './Navigation/'
+// import {Router, Routes, NavigationBar} from './Navigation/'
+import { Router, Scene } from 'react-native-router-flux'
 import configureStore from './Store/Store'
 import { Provider } from 'react-redux'
 import Actions from './Actions/Creators'
-import Drawer from 'react-native-drawer'
+// import Drawer from 'react-native-drawer'
 import DebugSettings from './Config/DebugSettings'
 import './Config/PushConfig'
 
 // Styles
 import styles, {drawerStyles} from './Containers/Styles/RootStyle'
+
+import PresentationScreen from './Containers/PresentationScreen'
 
 const store = configureStore()
 
@@ -21,7 +24,7 @@ export default class RNBase extends React.Component {
   }
 
   componentDidMount () {
-    this.navigator.drawer = this.drawer
+    // this.navigator.drawer = this.drawer
   }
 
   renderDrawerContent () {
@@ -43,23 +46,11 @@ export default class RNBase extends React.Component {
             barStyle='light-content'
           />
 
-          <Drawer
-            ref={(ref) => { this.drawer = ref }}
-            content={this.renderDrawerContent()}
-            styles={drawerStyles}
-            openDrawerOffset={100}
-            type='static'
-            tapToClose
-          >
-            <Navigator
-              ref={(ref) => { this.navigator = ref }}
-              initialRoute={Routes.PresentationScreen}
-              configureScene={Router.configureScene}
-              renderScene={Router.renderScene}
-              navigationBar={NavigationBar.render()}
-              style={styles.container}
-            />
-          </Drawer>
+          <Router>
+            <Scene key='Root'>
+              <Scene key='PresentationScreen' component={PresentationScreen} initial />
+            </Scene>
+          </Router>
         </View>
       </Provider>
     )
