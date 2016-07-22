@@ -8,8 +8,8 @@ import * as Utilities from '../utilities'
 import ora from 'ora'
 
 const igniteBase = 'ignite-base'
-const lockedReactNativeVersion = '0.28.0'
-const lockedIgniteVersion = '1.3.0'
+const lockedReactNativeVersion = '0.30.0'
+const lockedIgniteVersion = '1.3.1'
 
 const emptyFolder = (folder) => {
   Shell.rm('-rf', folder)
@@ -136,10 +136,12 @@ export class AppGenerator extends Generators.Base {
       this._logAndExit(`${xmark} Missing react-native - 'npm install -g react-native-cli'`)
     }
 
-    // verify 1.x or higher (we need react-native link)
-    if (Shell.exec("react-native -v | grep 'react-native-cli: [1-9]\\d*\\.\\d\\.\\d'", {silent: true}).code > 0) {
+    const rnCli = Shell.exec('react-native --version', { silent: true }).stdout
+    // verify 1.x.x or higher (we need react-native link)
+    if (!rnCLI.match(/react-native-cli:\s[1-9]\d*\.\d+\.\d+/)) {
       this._logAndExit(`${xmark} Must have at least version 1.x - 'npm install -g react-native-cli'`)
     }
+
     this.spinner.stop()
     this.log(`${check} Found react-native`)
   }
@@ -174,7 +176,7 @@ export class AppGenerator extends Generators.Base {
    * Run React Native init.
    */
   reactNativeInit () {
-    const status = 'Running React Native setup (~ 1 minute)'
+    const status = 'Running React Native setup (~ 2 minutes-ish)'
     this.spinner.start()
     this.spinner.text = status
     const done = this.async()
@@ -246,9 +248,11 @@ export class AppGenerator extends Generators.Base {
   checkoutTag () {
     // read the user's choice from the source-branch command line option
     const tag = this.options['tag'] || lockedIgniteVersion
+    const branch = this.options['branch']
+    const useMasterBranch = typeof branch === 'undefined' || branch === null || branch === 'master' || branch === ''
 
-    // jet if we said tag was master
-    if (tag === 'master') return
+    // jet if we said tag was master, or if they specified a branch
+    if (tag === 'master' || !useMasterBranch) return
 
     const status = `Using ignite release ${tag}`
     this.spinner.start()
@@ -365,7 +369,7 @@ export class AppGenerator extends Generators.Base {
    * Yeoman times its template copies.  :(
    */
   install () {
-    const npmStatus = 'Installing Ignite dependencies (~30 seconds-ish)'
+    const npmStatus = 'Installing Ignite dependencies (~ 1 minute-ish)'
     this.spinner.start()
     this.spinner.text = npmStatus
     const done = this.async()
