@@ -148,6 +148,17 @@ Program
     spawn('yo', [`react-native-ignite:${type}`], { shell: true, stdio: 'inherit' })
   })
 
+// add plugin
+Program
+  .command('add <plugin>')
+  .description('add a designated ignite plugin')
+  .alias('a')
+  .action((plugin) => {
+    checkYo()
+    console.log(`Adding ${plugin}`)
+    spawn('yo', [`react-native-ignite:${plugin}`], { shell: true, stdio: 'inherit' })
+  })
+
 Program
   .command('doctor')
   .description('shows your development environment settings')
