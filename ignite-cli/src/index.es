@@ -63,6 +63,13 @@ const checkReactNative = () => {
   }
 }
 
+const checkPlugin = (plugin) => {
+  if (!R.contains(plugin, ['maps'])) {
+    console.log(`Plugin type ${plugin} - not supported`)
+    Shell.exit(1)
+  }
+}
+
 // Check update version
 updateNotifier({ pkg: pjson }).notify()
 
@@ -155,6 +162,7 @@ Program
   .alias('a')
   .action((plugin) => {
     checkYo()
+    checkPlugin(plugin)
     console.log(`Adding ${plugin}`)
     spawn('yo', [`react-native-ignite:${plugin}`], { shell: true, stdio: 'inherit' })
   })
