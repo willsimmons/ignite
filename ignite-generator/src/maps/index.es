@@ -1,22 +1,23 @@
 #! /usr/bin/env node
 'use strict'
 import Generators from 'yeoman-generator'
-import * as Utilities from '../utilities'
 
-class SagaGenerator extends Generators.Base {
+class MapsGenerator extends Generators.Base {
 
-  constructor (args, options) {
-    super(args, options)
-    // this.argument('name', { type: String, required: true })
-    this.fileConfig = {
-      templatePath: 'saga.js.template',
-      destinationPath: 'Sagas',
-      test: true }
-  }
+  // Add node module in npm (locked to 0.11.0)
+  // react-native link
+  // Check if the user has a Usage Examples screen
+  // YES? add button and example
+  //
+
+
+  // constructor (args, options) {
+  //   super(args, options)
+  //   // this.argument('name', { type: String, required: true })
+  // }
 
   generateApp () {
-    console.log('HALOOOOOOOOOO')
-    // Utilities.createFiles(this, this.fileConfig)
+    // console.log('HALOOOOOOOOOO')
   }
 
   end () {
@@ -24,4 +25,4 @@ class SagaGenerator extends Generators.Base {
   }
 }
 
-module.exports = SagaGenerator
+module.exports = MapsGenerator
